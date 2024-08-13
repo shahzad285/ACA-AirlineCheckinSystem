@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Data;
-using System.Linq;
+using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ACA_AirlineCheckinSystem
 {
@@ -19,6 +16,8 @@ namespace ACA_AirlineCheckinSystem
         }
         public void CheckinSeats()
         {
+            Stopwatch sw = Stopwatch.StartNew();
+            sw.Start();
             using (var dbContext = new DatabaseContext(_connectionString))
             {
                 dbContext.OpenConnection();
@@ -36,6 +35,7 @@ namespace ACA_AirlineCheckinSystem
             }
 
             Task.WaitAll(tasks.ToArray());
+            Console.WriteLine("Time taken in milliseconds in with lock execution " + sw.ElapsedMilliseconds);
 
             PrintSeatingArrangement();
         }
@@ -48,7 +48,7 @@ namespace ACA_AirlineCheckinSystem
                     dbContext.OpenConnection();
                     dbContext.BeginTransaction();
                     // Find the next available seat
-                    string selectQuery = "SELECT TOP 1 Seat FROM FlightUsers with (ROWLOCK, UPDLOCK) WHERE UserId IS NULL order by Seat";
+                    string selectQuery = "SELECT TOP 1 Seat FROM FlightUsers with (ROWLOCK,XLOCK) WHERE UserId IS NULL";
 
                     DataTable result = dbContext.ExecuteQuery(selectQuery);
                     if (result.Rows.Count > 0)
@@ -85,6 +85,7 @@ namespace ACA_AirlineCheckinSystem
                 }
             }
         }
+
 
         public void PrintSeatingArrangement()
         {

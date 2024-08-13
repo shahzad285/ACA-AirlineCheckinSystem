@@ -1,14 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ACA_AirlineCheckinSystem
 {
+    //connection and transactions are not thread safe so make sure connections and Transactin sare made thread specific
     public class DatabaseContext : IDisposable
     {
         private readonly string _connectionString;

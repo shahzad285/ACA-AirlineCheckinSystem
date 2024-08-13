@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ACA_AirlineCheckinSystem
 {
@@ -19,6 +20,8 @@ namespace ACA_AirlineCheckinSystem
 
         public void CheckinSeats()
         {
+           Stopwatch sw = Stopwatch.StartNew();
+            sw.Start();
             using (var dbContext = new DatabaseContext(_connectionString))
             {
                 dbContext.OpenConnection();
@@ -35,6 +38,7 @@ namespace ACA_AirlineCheckinSystem
             }
 
             Task.WaitAll(tasks.ToArray());
+            Console.WriteLine("Time taken in milliseconds in without lock execution " + sw.ElapsedMilliseconds);
             PrintSeatingArrangement();
         }
 
@@ -83,6 +87,7 @@ namespace ACA_AirlineCheckinSystem
             }
         }
 
+       
         public void PrintSeatingArrangement()
         {
             using (var dbContext = new DatabaseContext(_connectionString))

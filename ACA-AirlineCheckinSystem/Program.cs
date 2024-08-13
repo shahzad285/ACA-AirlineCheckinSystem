@@ -1,12 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using ACA_AirlineCheckinSystem;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
 
 
 Console.WriteLine("Hello, World!");
 
+//Adding dependency injection both thecalsses although it made it bit coplicated but good for learning
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
@@ -44,7 +45,7 @@ var host = Host.CreateDefaultBuilder(args)
                 throw new InvalidOperationException("The connection string 'DefaultConnection' is not configured.");
             }
             return new DatabaseContext(connectionString);
-        });        
+        });
     })
     .Build();
 
